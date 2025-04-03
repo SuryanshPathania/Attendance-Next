@@ -1,4 +1,6 @@
 
+
+
 // import React from "react";
 // import { useRouter } from "next/navigation";
 
@@ -6,7 +8,7 @@
 //   user: {
 //     firstName: string;
 //     lastName: string;
-//     role: string;
+//     role: number; 
 //   };
 // }
 
@@ -14,12 +16,12 @@
 //   const router = useRouter();
 
 //   const getDashboardTitle = () => {
-//     switch (user.role.toLowerCase()) {
-//       case "superadmin":
+//     switch (user.role) {
+//       case 1:
 //         return "Superadmin Dashboard";
-//       case "hr":
+//       case 2:
 //         return "HR Admin Dashboard";
-//       case "user":
+//       case 3:
 //         return "User Dashboard";
 //       default:
 //         return "Dashboard";
@@ -34,16 +36,53 @@
 //       </div>
       
 //       <div className="flex items-center space-x-4">
-//         {/* Show Add Employee button only for Superadmin and HR */}
-//         {(user.role.toLowerCase() === "superadmin" || user.role.toLowerCase() === "hr") && (
-//           <button
+//         {/* Superadmin and HR can add employees */}
+//         {(user.role === 1 || user.role === 2) && (
+//           <a
 //             onClick={() => router.push("/addemployee")}
-//             className="bg-green-500 px-4 py-2 rounded-lg hover:bg-green-600 transition"
+//             className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
 //           >
 //             Add Employee
-//           </button>
+//           </a>
 //         )}
 
+//         {/* HR Admin can see Projects and Attendance */}
+//         {user.role === 2 && (
+//           <>
+//             <a
+//               onClick={() => router.push("/projects")}
+//               className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+//             >
+//               Projects
+//             </a>
+//             <a
+//               onClick={() => router.push("/attendance")}
+//               className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+//             >
+//               Attendance
+//             </a>
+//           </>
+//         )}
+
+//         {/* Users can only see Projects and Attendance */}
+//         {user.role === 3 && (
+//           <>
+//             <a
+//               onClick={() => router.push("/projects")}
+//               className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+//             >
+//               Projects
+//             </a>
+//             <a
+//               onClick={() => router.push("/attendance")}
+//               className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+//             >
+//               Attendance
+//             </a>
+//           </>
+//         )}
+
+//         {/* Logout Button */}
 //         <button
 //           onClick={() => {
 //             localStorage.removeItem("token");
@@ -62,7 +101,6 @@
 
 
 
-//////////////////////////////////////////////////////////////////
 import React from "react";
 import { useRouter } from "next/navigation";
 
@@ -70,7 +108,7 @@ interface NavbarProps {
   user: {
     firstName: string;
     lastName: string;
-    role: number; 
+    role: number;
   };
 }
 
@@ -96,17 +134,57 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
         <h1 className="text-2xl font-bold">{getDashboardTitle()}</h1>
         <p className="text-lg">Welcome, {user.firstName} {user.lastName}!</p>
       </div>
-      
+
       <div className="flex items-center space-x-4">
+        {/* Superadmin and HR can add employees */}
         {(user.role === 1 || user.role === 2) && (
           <a
             onClick={() => router.push("/addemployee")}
-            className=" hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+            className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
           >
             Add Employee
           </a>
         )}
 
+        {/* Superadmin and HR Admin can see Projects */}
+        {(user.role === 1 || user.role === 2) && (
+          <a
+            onClick={() => router.push("/projects")}
+            className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+          >
+            Projects
+          </a>
+        )}
+
+        {/* HR Admin can see Attendance */}
+        {user.role === 2 && (
+          <a
+            onClick={() => router.push("/attendance")}
+            className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+          >
+            Attendance
+          </a>
+        )}
+
+        {/* Users can only see Projects and Attendance */}
+        {user.role === 3 && (
+          <>
+            <a
+              onClick={() => router.push("/projects")}
+              className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+            >
+              Projects
+            </a>
+            <a
+              onClick={() => router.push("/attendance")}
+              className="hover:text-red-600 transition underline cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
+            >
+              Attendance
+            </a>
+          </>
+        )}
+
+        {/* Logout Button */}
         <button
           onClick={() => {
             localStorage.removeItem("token");
